@@ -25,21 +25,31 @@ class App extends React.Component {
 		const api_call = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=cf40c34f21ef9f48e5f30172da1b3334`);
 		const response = await api_call.json();
 
-    if(city && country){
+    if(response.main === undefined){
       this.setState({
-      temperature: response.main.temp,
-      city: response.name,
-      country: response.sys.country,
-      humidity:response.main.humidity,
-      description: response.weather[0].description,
-      error:""
+        error:"We could not find the location, please try another..."
       })
     }
-    else{
+    else 
+    {
+      if(city && country){
       this.setState({
-        error:"Please input a city and country..."
+        temperature: response.main.temp,
+        city: response.name,
+        country: response.sys.country,
+        humidity:response.main.humidity,
+        description: response.weather[0].description,
+        error:""
       })
     }
+      else{
+        this.setState({
+          error:"Please input a city and country..."
+        })
+      }
+    }
+
+    
 
     
 		console.log(response);
